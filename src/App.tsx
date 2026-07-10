@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 
 import Home from "./pages/Home";
-import Services from "./pages/Services";
-import Portfolio from "./pages/Portfolio";
-import Internships from "./pages/Internships";
-import Courses from "./pages/Courses";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import Services from "./pages/services/Services";
+import Portfolio from "./pages/portfolio/Portfolio";
+import Internships from "./pages/internships/Internships";
+import Courses from "./pages/courses/Courses";
+import About from "./pages/company/About";
+import Contact from "./pages/contact/Contact";
 
 function App() {
   return (
