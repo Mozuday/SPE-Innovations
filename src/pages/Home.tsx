@@ -7,14 +7,19 @@ import CTA from "../components/sections/CTA";
 
 const Home = () => {
   return (
-    <>
+    <main>
       <Hero />
+
       <ServicesPreview />
+
       <PortfolioPreview />
+
       <CoursesPreview />
+
       <InternshipPreview />
+
       <CTA />
-    </>
+    </main>
   );
 };
 

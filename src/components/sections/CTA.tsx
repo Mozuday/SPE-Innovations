@@ -1,46 +1,55 @@
-import { ArrowRight, Mail, Phone } from "lucide-react";
+import {
+  ArrowUpRight,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
-    <section className="py-24">
-      <div className="container mx-auto max-w-7xl px-6">
+    <section className="bg-white py-24 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="overflow-hidden rounded-[32px] bg-gradient-to-r from-blue-600 via-violet-600 to-cyan-500 p-10 md:p-16">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50">
 
-          <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="grid items-center gap-12 p-8 sm:p-10 md:p-14 lg:grid-cols-2 lg:p-16">
 
-            {/* Left */}
-
+            {/* Left Content */}
             <div>
 
-              <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white">
-                SPE Innovations
-              </span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900">
+                <span className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500" />
 
-              <h2 className="mt-6 text-4xl font-bold leading-tight text-white md:text-5xl">
-                Let's Build Something Amazing Together
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                  SPE Innovations
+                </span>
+              </div>
+
+              <h2 className="mt-6 max-w-xl text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl md:text-5xl dark:text-white">
+                Have an idea? Let's build it together.
               </h2>
 
-              <p className="mt-6 max-w-xl text-lg leading-8 text-white/90">
-                Whether you're looking for a professional website, a custom
-                application, technical guidance, internship opportunities or
-                practical courses, we're here to help you achieve your goals.
+              <p className="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8 dark:text-slate-400">
+                Whether you need a website, application, software solution or
+                technical assistance, we're here to help you turn your idea
+                into a practical digital product.
               </p>
 
-              <div className="mt-10 flex flex-wrap gap-4">
+              {/* Actions */}
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
 
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-4 font-semibold text-slate-900 transition hover:scale-105"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-500 dark:hover:text-white"
                 >
-                  Contact Us
-                  <ArrowRight size={18} />
+                  Start a Conversation
+
+                  <ArrowUpRight size={17} />
                 </Link>
 
                 <Link
                   to="/services"
-                  className="rounded-xl border border-white/40 px-7 py-4 font-semibold text-white transition hover:bg-white/10"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition-colors hover:border-slate-900 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
                 >
                   Explore Services
                 </Link>
@@ -49,52 +58,75 @@ const CTA = () => {
 
             </div>
 
-            {/* Right */}
+            {/* Contact Card */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-950">
 
-            <div className="rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-lg">
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                Get in touch
+              </p>
 
-              <h3 className="text-2xl font-bold text-white">
-                Get Started Today
+              <h3 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Let's talk about your project.
               </h3>
 
-              <p className="mt-4 leading-7 text-white/80">
-                Have an idea or a project in mind? Reach out and let's discuss
-                how SPE Innovations can help bring it to life.
+              <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                Share your requirements with us and we'll get back to you to
+                discuss the next steps.
               </p>
 
               <div className="mt-8 space-y-5">
 
-                <div className="flex items-center gap-4">
-
-                  <div className="rounded-xl bg-white/20 p-3">
-                    <Mail size={22} />
+                {/* Email */}
+                <a
+                  href="mailto:contact@speinnovations.in"
+                  className="group flex items-center gap-4"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
+                    <Mail size={19} />
                   </div>
 
                   <div>
-                    <p className="text-sm text-white/70">Email</p>
-                    <p className="font-semibold">
-                      contact@speinnovations.com
+                    <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-500">
+                      Email
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">
+                      contact@speinnovations.in
                     </p>
                   </div>
+                </a>
 
-                </div>
-
-                <div className="flex items-center gap-4">
-
-                  <div className="rounded-xl bg-white/20 p-3">
-                    <Phone size={22} />
+                {/* Phone */}
+                <a
+                  href="tel:+91XXXXXXXXXX"
+                  className="group flex items-center gap-4"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
+                    <Phone size={19} />
                   </div>
 
                   <div>
-                    <p className="text-sm text-white/70">Phone</p>
-                    <p className="font-semibold">
+                    <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-500">
+                      Phone
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">
                       +91 XXXXX XXXXX
                     </p>
                   </div>
-
-                </div>
+                </a>
 
               </div>
+
+              {/* Contact Link */}
+              <Link
+                to="/contact"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+              >
+                View contact options
+
+                <ArrowUpRight size={16} />
+              </Link>
 
             </div>
 

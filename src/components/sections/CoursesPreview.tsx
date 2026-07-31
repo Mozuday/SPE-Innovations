@@ -1,4 +1,8 @@
-import { BookOpen, Clock3, ArrowRight } from "lucide-react";
+import { BookOpen, Clock3, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import Card from "../ui/Card";
+import SectionTitle from "../ui/SectionTitle";
 
 const courses = [
   {
@@ -6,82 +10,104 @@ const courses = [
     duration: "12 Weeks",
     level: "Beginner to Advanced",
     description:
-      "Learn HTML, CSS, JavaScript, React, Node.js, Express and MongoDB by building real-world projects.",
+      "Learn modern frontend and backend development by building practical projects and understanding how complete web applications work.",
   },
   {
     title: "Frontend Development",
     duration: "6 Weeks",
     level: "Beginner",
     description:
-      "Master responsive UI development using HTML, CSS, JavaScript, Tailwind CSS and React.",
+      "Learn to build responsive and accessible interfaces using HTML, CSS, JavaScript, Tailwind CSS and React.",
   },
   {
     title: "Backend Development",
     duration: "8 Weeks",
     level: "Intermediate",
     description:
-      "Build secure REST APIs using Node.js, Express, MongoDB and authentication.",
+      "Learn how to build REST APIs, work with databases and implement authentication using modern backend technologies.",
   },
 ];
 
 const CoursesPreview = () => {
   return (
-    <section className="py-24">
-      <div className="container mx-auto max-w-7xl px-6">
+    <section className="border-b border-slate-200 bg-white py-24 dark:border-slate-800 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="text-center">
+        {/* Section Header */}
+        <SectionTitle
+          eyebrow="Learning"
+          title="Build skills through practical learning"
+          description="Courses designed to help students and aspiring developers understand real-world development through practical projects and industry-relevant technologies."
+        />
 
-          <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">
-            Courses
-          </span>
-
-          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white md:text-5xl">
-            Learn Industry Skills
-          </h2>
-
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            Practical courses designed for students, freshers and developers
-            who want real project experience instead of only theory.
-          </p>
-
-        </div>
-
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
+        {/* Courses */}
+        <div className="mt-16 grid gap-6 lg:grid-cols-3">
 
           {courses.map((course) => (
-            <div
+            <Card
               key={course.title}
-              className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:border-slate-700 dark:bg-slate-900"
+              className="group flex h-full flex-col p-7"
             >
 
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-300">
-                <BookOpen size={30} />
+              {/* Icon */}
+              <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition-colors group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-600 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:border-blue-900 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
+                <BookOpen size={22} strokeWidth={1.8} />
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+              {/* Course Title */}
+              <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
                 {course.title}
               </h3>
 
-              <div className="mt-5 flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                <Clock3 size={18} />
-                {course.duration}
+              {/* Course Meta */}
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+
+                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                  <Clock3 size={16} />
+                  {course.duration}
+                </div>
+
+                <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+
+                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                  {course.level}
+                </span>
+
               </div>
 
-              <div className="mt-2 inline-block rounded-full bg-slate-100 px-3 py-1 text-sm font-medium dark:bg-slate-800">
-                {course.level}
-              </div>
-
-              <p className="mt-5 leading-7 text-slate-600 dark:text-slate-300">
+              {/* Description */}
+              <p className="mt-5 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-400">
                 {course.description}
               </p>
 
-              <button className="mt-8 flex items-center gap-2 font-semibold text-green-600 hover:text-green-700">
-                View Course
-                <ArrowRight size={18} />
-              </button>
+              {/* Course Link */}
+              <Link
+                to="/courses"
+                className="mt-7 inline-flex w-fit items-center gap-2 text-sm font-semibold text-slate-900 transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+              >
+                View course
 
-            </div>
+                <ArrowUpRight
+                  size={16}
+                  className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
+              </Link>
+
+            </Card>
           ))}
+
+        </div>
+
+        {/* CTA */}
+        <div className="mt-12 text-center">
+
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-slate-900 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
+          >
+            Explore all courses
+            <ArrowUpRight size={16} />
+          </Link>
 
         </div>
 

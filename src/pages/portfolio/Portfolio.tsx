@@ -1,195 +1,135 @@
-import {
-  Globe,
-  Smartphone,
-  Laptop,
-  Bug,
-  Wrench,
-  CheckCircle,
-} from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const services = [
+const projects = [
   {
-    icon: <Globe size={42} />,
-    title: "Website Development",
+    title: "Portfolio Website",
+    category: "Personal Branding",
     description:
-      "Professional, responsive and SEO-friendly websites built for businesses, startups and personal brands.",
-    features: [
-      "Business Websites",
-      "Portfolio Websites",
-      "E-Commerce",
-      "Landing Pages",
-    ],
+      "A modern and responsive portfolio website designed to showcase projects, technical skills and professional experience.",
+    technologies: ["React", "TypeScript", "Tailwind CSS"],
   },
   {
-    icon: <Smartphone size={42} />,
-    title: "App Development",
+    title: "SPE Innovations",
+    category: "Company Website",
     description:
-      "Cross-platform Android and iOS applications using modern technologies with excellent performance.",
-    features: [
-      "Android Apps",
-      "iOS Apps",
-      "React Native",
-      "Flutter",
-    ],
+      "A professional digital platform for software services, internships, certification courses and technology solutions.",
+    technologies: ["React", "TypeScript", "Node.js"],
   },
   {
-    icon: <Laptop size={42} />,
-    title: "Software Development",
+    title: "Custom Web Application",
+    category: "Business Solution",
     description:
-      "Custom software solutions designed to automate business operations and improve productivity.",
-    features: [
-      "ERP Systems",
-      "CRM",
-      "Desktop Software",
-      "Automation",
-    ],
-  },
-  {
-    icon: <Bug size={42} />,
-    title: "Bug Fixing",
-    description:
-      "Debugging, optimization and maintenance for existing websites and applications.",
-    features: [
-      "Performance",
-      "Security",
-      "Error Fixing",
-      "Code Refactoring",
-    ],
-  },
-  {
-    icon: <Wrench size={42} />,
-    title: "Technical Consulting",
-    description:
-      "Professional consultation to help choose the right technologies and architecture.",
-    features: [
-      "Architecture",
-      "Deployment",
-      "Code Review",
-      "Mentoring",
-    ],
+      "A scalable web application designed to simplify business workflows, improve productivity and provide a better user experience.",
+    technologies: ["React", "Node.js", "PostgreSQL"],
   },
 ];
 
-const Services = () => {
+const Portfolio = () => {
   return (
-    <>
+    <main>
       {/* Hero */}
-
-      <section className="bg-gradient-to-br from-blue-50 via-white to-violet-50 py-24 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="container mx-auto max-w-7xl px-6 text-center">
-
-          <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-            Our Services
+      <section className="relative overflow-hidden bg-gradient-to-br from-violet-50 via-white to-blue-50 py-24 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+        <div className="mx-auto max-w-7xl px-6 text-center">
+          <span className="inline-flex rounded-full bg-violet-100 px-4 py-2 text-sm font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+            Our Portfolio
           </span>
 
-          <h1 className="mt-6 text-5xl font-bold dark:text-white">
-            Complete Digital Solutions
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 md:text-6xl dark:text-white">
+            Projects Built With Purpose
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            We help startups, businesses and individuals transform ideas into
-            modern digital products through innovative technology solutions.
+            Explore some of our projects and digital solutions. We focus on
+            performance, scalability, usability and modern technology.
           </p>
-
         </div>
       </section>
 
-      {/* Services */}
-
+      {/* Projects */}
       <section className="py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-
-          <div className="grid gap-10">
-
-            {services.map((service) => (
-              <div
-                key={service.title}
-                className="grid items-center gap-10 rounded-3xl border border-slate-200 bg-white p-10 shadow-sm transition hover:shadow-xl dark:border-slate-700 dark:bg-slate-900 lg:grid-cols-2"
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => (
+              <article
+                key={project.title}
+                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
               >
+                {/* Project Preview */}
+                <div className="relative flex h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-violet-600 to-cyan-500">
+                  <div className="absolute inset-0 bg-black/10 transition group-hover:bg-black/0" />
 
-                {/* Left */}
+                  <span className="relative text-3xl font-bold text-white">
+                    Project
+                  </span>
 
-                <div>
-
-                  <div className="mb-6 inline-flex rounded-2xl bg-blue-100 p-5 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                    {service.icon}
+                  <div className="absolute right-5 top-5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+                    {project.category}
                   </div>
+                </div>
 
-                  <h2 className="text-3xl font-bold dark:text-white">
-                    {service.title}
+                {/* Project Content */}
+                <div className="p-8">
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    {project.title}
                   </h2>
 
-                  <p className="mt-6 leading-8 text-slate-600 dark:text-slate-300">
-                    {service.description}
+                  <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
+                    {project.description}
                   </p>
 
-                </div>
-
-                {/* Right */}
-
-                <div>
-
-                  <h3 className="mb-6 text-xl font-semibold dark:text-white">
-                    What We Offer
-                  </h3>
-
-                  <div className="space-y-5">
-
-                    {service.features.map((feature) => (
-                      <div
-                        key={feature}
-                        className="flex items-center gap-4"
+                  {/* Technologies */}
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {project.technologies.map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300"
                       >
-                        <CheckCircle
-                          className="text-green-500"
-                          size={22}
-                        />
-
-                        <span className="text-lg dark:text-slate-200">
-                          {feature}
-                        </span>
-
-                      </div>
+                        {technology}
+                      </span>
                     ))}
-
                   </div>
 
+                  {/* Action */}
+                  <button
+                    type="button"
+                    className="mt-8 inline-flex items-center gap-2 font-semibold text-blue-600 transition-all group-hover:gap-3 dark:text-blue-400"
+                  >
+                    View Project
+                    <ExternalLink size={17} />
+                  </button>
                 </div>
-
-              </div>
+              </article>
             ))}
-
           </div>
-
         </div>
       </section>
 
       {/* CTA */}
-
       <section className="pb-24">
-        <div className="container mx-auto max-w-7xl px-6">
-
-          <div className="rounded-3xl bg-gradient-to-r from-blue-600 via-violet-600 to-cyan-500 p-12 text-center text-white">
-
-            <h2 className="text-4xl font-bold">
-              Have a Project in Mind?
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="rounded-3xl bg-slate-900 p-10 text-center dark:bg-slate-800 md:p-14">
+            <h2 className="text-3xl font-bold text-white md:text-4xl">
+              Have an Idea for Your Next Project?
             </h2>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-white/90">
-              Let's discuss your requirements and build a solution that helps
-              your business grow.
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+              Let's discuss your requirements and create a reliable digital
+              solution designed around your goals.
             </p>
 
-            <button className="mt-8 rounded-xl bg-white px-8 py-4 font-semibold text-slate-900 transition hover:scale-105">
-              Request a Quote
-            </button>
-
+            <Link
+              to="/contact"
+              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-slate-900 transition hover:scale-105"
+            >
+              Start a Project
+              <ArrowRight size={18} />
+            </Link>
           </div>
-
         </div>
       </section>
-    </>
+    </main>
   );
 };
 
-export default Services;
+export default Portfolio;

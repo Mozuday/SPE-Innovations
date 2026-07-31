@@ -1,67 +1,117 @@
 import hero from "../../assets/images/hero.png";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ButtonLink } from "../ui/Button";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+    <section className="relative overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
 
-      {/* Glow */}
-      <div className="absolute left-20 top-20 h-72 w-72 rounded-full bg-violet-500/20 blur-[120px]" />
-      <div className="absolute right-20 bottom-10 h-72 w-72 rounded-full bg-cyan-500/20 blur-[120px]" />
+      {/* Subtle background grid */}
+      <div className="pointer-events-none absolute inset-0 -z-0 opacity-40 dark:opacity-20">
+        <div
+          className="
+            absolute
+            inset-0
+            bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)]
+            bg-[size:64px_64px]
+            dark:bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)]
+          "
+        />
+      </div>
 
-      <div className="container mx-auto grid min-h-[90vh] max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-72px)] max-w-7xl items-center gap-14 px-5 py-20 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-24">
 
-        {/* Left */}
+        {/* Left Content */}
+        <div className="max-w-2xl">
 
-        <div>
+          {/* Eyebrow */}
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 dark:border-slate-800 dark:bg-slate-900">
+            <span className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500" />
 
-          <span className="inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-5 py-2 text-sm font-semibold text-violet-600 dark:text-violet-300">
-            SPE Innovations
-          </span>
-
-          <h1 className="mt-8 text-5xl font-black leading-tight text-slate-900 dark:text-white md:text-7xl">
-            Building
-            <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-cyan-500 bg-clip-text text-transparent">
-              {" "}Digital Solutions
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+              SPE Innovations
             </span>
+          </div>
 
-            <br />
-
-            For Modern Businesses
+          {/* Heading */}
+          <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-slate-950 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white">
+            Building digital
+            <span className="block text-blue-600 dark:text-blue-500">
+              solutions that matter.
+            </span>
           </h1>
 
-          <p className="mt-8 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            We design websites, mobile applications, software solutions,
-            professional internships and certification courses that help
-            businesses and students grow together.
+          {/* Description */}
+          <p className="mt-7 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8 dark:text-slate-400">
+            We design and develop modern websites, applications and software
+            solutions that help businesses build a stronger digital presence.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-5">
+          {/* Buttons */}
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
 
-            <button className="flex items-center gap-2 rounded-xl bg-blue-600 px-7 py-4 font-semibold text-white transition hover:bg-blue-700">
-              Get Started
-              <ArrowRight size={18} />
-            </button>
+            <ButtonLink
+              to="/contact"
+              variant="primary"
+              className="w-full sm:w-auto"
+            >
+              Start a Project
+              <ArrowRight size={17} />
+            </ButtonLink>
 
-            <button className="rounded-xl border border-slate-300 bg-white px-7 py-4 font-semibold transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800">
+            <ButtonLink
+              to="/services"
+              variant="outline"
+              className="w-full sm:w-auto"
+            >
               Explore Services
-            </button>
+            </ButtonLink>
+
+          </div>
+
+          {/* Trust Points */}
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-6">
+
+            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <CheckCircle2
+                size={17}
+                className="text-blue-600 dark:text-blue-500"
+              />
+              Business-focused solutions
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <CheckCircle2
+                size={17}
+                className="text-blue-600 dark:text-blue-500"
+              />
+              Practical technical support
+            </div>
 
           </div>
 
         </div>
 
-        {/* Right */}
+        {/* Right Visual */}
+        <div className="relative flex items-center justify-center lg:justify-end">
 
-        <div className="relative">
+          {/* Image Container */}
+          <div className="relative w-full max-w-xl">
 
-          <img
-            src={hero}
-            alt="SPE Innovations"
-            className="mx-auto w-full max-w-lg"
-          />
+            {/* Subtle border frame */}
+            <div className="absolute -inset-4 -z-10 rounded-3xl border border-slate-200 dark:border-slate-800" />
+
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/20">
+
+              <img
+                src={hero}
+                alt="SPE Innovations digital solutions"
+                className="h-auto w-full object-contain"
+              />
+
+            </div>
+
+          </div>
 
         </div>
 

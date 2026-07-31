@@ -4,88 +4,126 @@ import {
   Laptop,
   Bug,
   Wrench,
+  ArrowUpRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import Card from "../ui/Card";
+import SectionTitle from "../ui/SectionTitle";
 
 const services = [
   {
-    icon: <Globe size={34} />,
+    icon: Globe,
     title: "Website Development",
     description:
-      "Responsive, modern and SEO-friendly websites for businesses and startups.",
+      "Responsive and modern websites designed to help businesses build a professional online presence.",
   },
   {
-    icon: <Smartphone size={34} />,
+    icon: Smartphone,
     title: "App Development",
     description:
-      "Cross-platform Android and iOS applications built with modern technologies.",
+      "Practical mobile applications designed to provide reliable experiences across modern devices.",
   },
   {
-    icon: <Laptop size={34} />,
+    icon: Laptop,
     title: "Software Development",
     description:
-      "Custom software solutions designed to automate and simplify business operations.",
+      "Custom software solutions built to simplify workflows and solve specific business problems.",
   },
   {
-    icon: <Bug size={34} />,
+    icon: Bug,
     title: "Bug Fixing",
     description:
-      "Performance optimization, debugging and maintenance for existing applications.",
+      "Debugging, performance improvements and technical maintenance for existing applications.",
   },
   {
-    icon: <Wrench size={34} />,
+    icon: Wrench,
     title: "Technical Consulting",
     description:
-      "Professional guidance for architecture, deployment and technology decisions.",
+      "Technical guidance for choosing technologies, improving architecture and planning digital products.",
   },
 ];
 
 const ServicesPreview = () => {
   return (
-    <section className="py-24">
-      <div className="container mx-auto max-w-7xl px-6">
+    <section className="border-b border-slate-200 bg-white py-24 dark:border-slate-800 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="text-center">
+        {/* Section Header */}
+        <SectionTitle
+          eyebrow="What We Do"
+          title="Technology solutions built around your needs"
+          description="From websites and applications to software development and technical support, we help turn ideas and business requirements into practical digital solutions."
+        />
 
-          <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-            Our Services
-          </span>
+        {/* Services Grid */}
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white md:text-5xl">
-            Everything Your Business Needs
-          </h2>
+          {services.map((service) => {
+            const Icon = service.icon;
 
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            From websites and mobile apps to software development, technical
-            consulting and bug fixing, SPE Innovations delivers reliable digital
-            solutions for businesses of every size.
-          </p>
+            return (
+              <Card
+                key={service.title}
+                className="group flex h-full flex-col p-7"
+              >
+                {/* Icon */}
+                <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition-colors group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-600 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:border-blue-900 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
+                  <Icon size={22} strokeWidth={1.8} />
+                </div>
 
-        </div>
+                {/* Content */}
+                <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                  {service.title}
+                </h3>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <p className="mt-3 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {service.description}
+                </p>
 
-          {services.map((service) => (
-            <div
-              key={service.title}
-              className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-xl dark:border-slate-700 dark:bg-slate-900"
-            >
-              <div className="mb-6 inline-flex rounded-2xl bg-blue-100 p-4 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                {service.icon}
-              </div>
+                {/* Link */}
+                <Link
+                  to="/services"
+                  className="mt-7 inline-flex w-fit items-center gap-2 text-sm font-semibold text-slate-900 transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                >
+                  Learn more
 
-              <h3 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">
-                {service.title}
-              </h3>
+                  <ArrowUpRight
+                    size={16}
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              </Card>
+            );
+          })}
 
-              <p className="leading-7 text-slate-600 dark:text-slate-300">
-                {service.description}
+          {/* View All Services */}
+          <div className="flex h-full min-h-[260px] flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-7 dark:border-slate-700 dark:bg-slate-900/50">
+
+            <div>
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                Have a project in mind?
               </p>
 
-              <button className="mt-8 font-semibold text-blue-600 transition group-hover:translate-x-2">
-                Learn More →
-              </button>
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                Let's discuss how we can help.
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                Tell us what you're trying to build or fix, and we'll help you
+                find a practical way forward.
+              </p>
             </div>
-          ))}
+
+            <Link
+              to="/contact"
+              className="mt-8 inline-flex w-fit items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-500 dark:hover:text-white"
+            >
+              Start a conversation
+              <ArrowUpRight size={16} />
+            </Link>
+
+          </div>
 
         </div>
 

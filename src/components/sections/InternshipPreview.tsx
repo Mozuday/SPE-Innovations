@@ -4,104 +4,130 @@ import {
   Code2,
   Database,
   Smartphone,
-  ArrowRight,
+  ArrowUpRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import Card from "../ui/Card";
+import SectionTitle from "../ui/SectionTitle";
 
 const internships = [
   {
-    icon: <Monitor size={30} />,
+    icon: Monitor,
     title: "Web Design",
     description:
-      "Learn modern UI/UX principles and build responsive websites using industry standards.",
+      "Learn modern UI and UX principles while working on responsive and user-friendly digital experiences.",
   },
   {
-    icon: <Code2 size={30} />,
+    icon: Code2,
     title: "Frontend Development",
     description:
-      "Work with HTML, CSS, JavaScript, React and Tailwind CSS on real client projects.",
+      "Build practical interfaces using HTML, CSS, JavaScript, React and modern frontend tools.",
   },
   {
-    icon: <Database size={30} />,
+    icon: Database,
     title: "Backend Development",
     description:
-      "Develop REST APIs, databases, authentication systems and scalable server applications.",
+      "Learn how APIs, databases, authentication and server-side applications work together.",
   },
   {
-    icon: <Smartphone size={30} />,
+    icon: Smartphone,
     title: "App Development",
     description:
-      "Build Android and cross-platform mobile applications with modern frameworks.",
+      "Explore mobile application development and learn how modern apps are designed and built.",
   },
 ];
 
 const InternshipPreview = () => {
   return (
-    <section className="bg-slate-50 py-24 dark:bg-slate-950">
-      <div className="container mx-auto max-w-7xl px-6">
+    <section className="border-b border-slate-200 bg-slate-50 py-24 dark:border-slate-800 dark:bg-slate-900/40">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="text-center">
+        {/* Section Header */}
+        <SectionTitle
+          eyebrow="Internship Program"
+          title="Learn by building real projects"
+          description="Our internship program is designed to help students and aspiring developers gain practical experience, improve their technical skills and build meaningful projects."
+        />
 
-          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
-            Internship Program
-          </span>
+        {/* Internship Areas */}
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white md:text-5xl">
-            Gain Real Industry Experience
-          </h2>
+          {internships.map((item) => {
+            const Icon = item.icon;
 
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            Work on practical projects under experienced developers, improve
-            your technical skills, and receive an internship certificate after
-            successful completion.
-          </p>
+            return (
+              <Card
+                key={item.title}
+                className="group p-7"
+              >
+
+                {/* Icon */}
+                <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition-colors group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:border-blue-900 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
+                  <Icon size={22} strokeWidth={1.8} />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {item.description}
+                </p>
+
+              </Card>
+            );
+          })}
 
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {/* Internship CTA */}
+        <div className="mt-16 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
 
-          {internships.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:border-slate-700 dark:bg-slate-900"
-            >
+          <div className="grid items-center gap-10 p-8 sm:p-10 lg:grid-cols-[1fr_auto] lg:p-12">
 
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-300">
-                {item.icon}
+            {/* Content */}
+            <div className="flex gap-5">
+
+              <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white sm:flex dark:bg-white dark:text-slate-950">
+                <BriefcaseBusiness size={22} />
               </div>
 
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                {item.title}
-              </h3>
+              <div>
 
-              <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
-                {item.description}
-              </p>
+                <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  Start your journey
+                </p>
+
+                <h3 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+                  Ready to gain practical experience?
+                </h3>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  Apply for an internship and work on practical projects that
+                  can help strengthen your technical skills and portfolio.
+                </p>
+
+              </div>
 
             </div>
-          ))}
 
-        </div>
+            {/* CTA */}
+            <Link
+              to="/internships/apply"
+              className="group inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-500 dark:hover:text-white"
+            >
+              Apply for Internship
 
-        <div className="mt-20 rounded-3xl bg-gradient-to-r from-blue-600 via-violet-600 to-cyan-500 p-10 text-center text-white">
+              <ArrowUpRight
+                size={17}
+                className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </Link>
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
-            <BriefcaseBusiness size={36} />
           </div>
-
-          <h3 className="mt-6 text-3xl font-bold">
-            Kickstart Your Career with SPE Innovations
-          </h3>
-
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-white/90">
-            Learn by building real-world applications, collaborate with a
-            professional team and strengthen your portfolio through practical
-            experience.
-          </p>
-
-          <button className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-slate-900 transition hover:scale-105">
-            Apply for Internship
-            <ArrowRight size={18} />
-          </button>
 
         </div>
 
