@@ -1,11 +1,11 @@
 export const COMPANY = {
-  name: "SPE Innovations",
+  name: "SPE Visions",
 
   email: "uday88687@gmail.com",
 
   whatsapp: "https://wa.me/7906932858",
 
-  instagram: "https://instagram.com/speinnovations",
+  instagram: "https://instagram.com/speVisions",
 
   github: "https://github.com/yourusername",
 

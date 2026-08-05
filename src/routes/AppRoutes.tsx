@@ -29,6 +29,7 @@ import ManageVideos from "../admin/pages/courses/ManageVideos";
 import ManageInternships from "../admin/pages/internships/ManageInternships";
 import ManageJobs from "../admin/pages/jobs/ManageJobs";
 import ManageServices from "../admin/pages/services/ManageServices";
+import Settings from "../admin/pages/Settings";
 
 const AppRoutes = () => {
   return (
@@ -50,85 +51,49 @@ const AppRoutes = () => {
 
         <Route path="/courses" element={<Courses />} />
 
-        <Route
-          path="/courses/:courseId"
-          element={<CourseDetails />}
-        />
+        <Route path="/courses/:courseId" element={<CourseDetails />} />
 
-        <Route
-          path="/certificate"
-          element={<Certificate />}
-        />
+        <Route path="/certificate" element={<Certificate />} />
 
-        <Route
-          path="/internships"
-          element={<Internships />}
-        />
+        <Route path="/internships" element={<Internships />} />
 
-        <Route
-          path="/internships/apply"
-          element={<Apply />}
-        />
+        <Route path="/internships/apply" element={<Apply />} />
       </Route>
 
       {/* ========================= */}
       {/* ADMIN LOGIN */}
       {/* ========================= */}
 
-      <Route
-        path="/admin/login"
-        element={<AdminLogin />}
-      />
+      <Route path="/admin/login" element={<AdminLogin />} />
 
       {/* ========================= */}
       {/* ADMIN PANEL */}
       {/* ========================= */}
 
-      <Route
-        path="/admin"
-        element={<AdminLayout />}
-      >
+      <Route path="/admin" element={<AdminLayout />}>
         {/* Dashboard */}
-        <Route
-          index
-          element={<Dashboard />}
-        />
+        <Route index element={<Dashboard />} />
 
         {/* Services */}
-        <Route
-          path="services"
-          element={<ManageServices />}
-        />
+        <Route path="services" element={<ManageServices />} />
 
         {/* Courses */}
-        <Route
-          path="courses"
-          element={<ManageCourses />}
-        />
+        <Route path="courses" element={<ManageCourses />} />
 
-        {/* Course Videos */}
-        <Route
-          path="courses/videos"
-          element={<ManageVideos />}
-        />
+        {/* Course Videos — scoped to a specific course */}
+        <Route path="courses/:courseId/videos" element={<ManageVideos />} />
 
         {/* Internships */}
-        <Route
-          path="internships"
-          element={<ManageInternships />}
-        />
+        <Route path="internships" element={<ManageInternships />} />
 
         {/* Jobs */}
-        <Route
-          path="jobs"
-          element={<ManageJobs />}
-        />
+        <Route path="jobs" element={<ManageJobs />} />
 
         {/* Blogs */}
-        <Route
-          path="blogs"
-          element={<ManageBlogs />}
-        />
+        <Route path="blogs" element={<ManageBlogs />} />
+
+        {/* Settings */}
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );

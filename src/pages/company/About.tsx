@@ -58,7 +58,7 @@ const About = () => {
 
         <div className="relative mx-auto max-w-7xl px-6 text-center">
           <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-            About SPE Innovations
+            About SPE Visions
           </span>
 
           <h1 className="mx-auto mt-7 max-w-4xl text-4xl font-bold tracking-tight text-slate-900 md:text-6xl dark:text-white">
@@ -69,7 +69,7 @@ const About = () => {
           </h1>
 
           <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            SPE Innovations is a technology-focused company providing digital
+            SPE Visions is a technology-focused company providing digital
             solutions for businesses and practical learning opportunities for
             students and aspiring developers.
           </p>
@@ -91,7 +91,7 @@ const About = () => {
               </h2>
 
               <p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
-                SPE Innovations was created with a simple goal: to combine
+                SPE Visions was created with a simple goal: to combine
                 technology, practical development and learning opportunities
                 into one ecosystem.
               </p>
@@ -318,7 +318,7 @@ const About = () => {
 
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/90">
               Whether you need a digital solution for your business or want to
-              develop your technology career, SPE Innovations is here to help.
+              develop your technology career, SPE Visions is here to help.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4">

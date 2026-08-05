@@ -77,7 +77,7 @@ const Internships = () => {
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
             Gain practical experience by working on real-world projects,
             strengthen your technical skills and build a professional portfolio
-            with SPE Innovations.
+            with SPE Visions.
           </p>
 
           <Link

@@ -1,7 +1,7 @@
 export const COMPANY = {
-  name: "SPE Innovations",
+  name: "SPE Visions",
 
-  email: "contact@speinnovations.in",
+  email: "contact@speVisions.in",
 
   phone: "+91 XXXXX XXXXX",
 

@@ -39,7 +39,7 @@ const Navbar = () => {
             </span>
 
             <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-              Innovations
+              Visions
             </span>
           </div>
         </Link>

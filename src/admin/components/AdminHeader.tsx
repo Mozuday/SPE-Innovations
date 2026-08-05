@@ -24,7 +24,7 @@ const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
           </h1>
 
           <p className="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">
-            Manage SPE Innovations
+            Manage SPE Visions
           </p>
         </div>
       </div>

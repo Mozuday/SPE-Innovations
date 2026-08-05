@@ -32,7 +32,7 @@ const Footer = () => {
                 </p>
 
                 <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                  Innovations
+                  Visions
                 </p>
               </div>
             </Link>
@@ -155,11 +155,11 @@ const Footer = () => {
             <div className="mt-5 space-y-4">
 
               <a
-                href="mailto:contact@speinnovations.in"
+                href="mailto:contact@speVisions.in"
                 className="flex items-center gap-3 text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
               >
                 <Mail size={17} />
-                contact@speinnovations.in
+                contact@speVisions.in
               </a>
 
               <a
@@ -196,7 +196,7 @@ const Footer = () => {
         <div className="mt-16 flex flex-col gap-4 border-t border-slate-200 pt-6 text-sm dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
 
           <p className="text-slate-500 dark:text-slate-500">
-            © {new Date().getFullYear()} SPE Innovations. All rights reserved.
+            © {new Date().getFullYear()} SPE Visions. All rights reserved.
           </p>
 
           <div className="flex gap-6">

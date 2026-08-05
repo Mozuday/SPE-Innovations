@@ -67,7 +67,7 @@ const Apply = () => {
             </h1>
 
             <p className="mt-5 leading-8 text-slate-600 dark:text-slate-300">
-              Thank you for applying to SPE Innovations. We have received your
+              Thank you for applying to SPE Visions. We have received your
               application and will review your details.
             </p>
 

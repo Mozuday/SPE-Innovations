@@ -29,7 +29,7 @@ const Hero = () => {
             <span className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500" />
 
             <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-              SPE Innovations
+              SPE Visions
             </span>
           </div>
 
@@ -105,7 +105,7 @@ const Hero = () => {
 
               <img
                 src={hero}
-                alt="SPE Innovations digital solutions"
+                alt="SPE Visions digital solutions"
                 className="h-auto w-full object-contain"
               />
 

@@ -21,7 +21,7 @@ const CTA = () => {
                 <span className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500" />
 
                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                  SPE Innovations
+                  SPE Visions
                 </span>
               </div>
 
@@ -78,7 +78,7 @@ const CTA = () => {
 
                 {/* Email */}
                 <a
-                  href="mailto:contact@speinnovations.in"
+                  href="mailto:contact@speVisions.in"
                   className="group flex items-center gap-4"
                 >
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:bg-blue-950/40 dark:group-hover:text-blue-400">
@@ -91,7 +91,7 @@ const CTA = () => {
                     </p>
 
                     <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">
-                      contact@speinnovations.in
+                      contact@speVisions.in
                     </p>
                   </div>
                 </a>

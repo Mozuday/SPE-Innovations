@@ -63,7 +63,7 @@ const Certificate = () => {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            Verify the authenticity of a certificate issued by SPE Innovations
+            Verify the authenticity of a certificate issued by SPE Visions
             using the unique certificate ID.
           </p>
         </div>
@@ -126,7 +126,7 @@ const Certificate = () => {
                   </h2>
 
                   <p className="mt-2 text-green-100">
-                    This certificate is valid and was issued by SPE Innovations.
+                    This certificate is valid and was issued by SPE Visions.
                   </p>
                 </div>
 
@@ -213,7 +213,7 @@ const Certificate = () => {
               </h3>
 
               <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
-                Every certificate issued by SPE Innovations can be verified
+                Every certificate issued by SPE Visions can be verified
                 using its unique certificate ID.
               </p>
             </div>

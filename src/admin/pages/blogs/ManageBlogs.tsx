@@ -21,7 +21,7 @@ const initialBlogs: Blog[] = [
       "A professional website helps businesses establish credibility and reach more customers.",
     content:
       "A professional website is one of the most important digital assets for a modern business.",
-    author: "SPE Innovations",
+    author: "SPE Visions",
     published: true,
     createdAt: "2026-07-24",
   },
@@ -37,7 +37,7 @@ const ManageBlogs = () => {
     category: "",
     excerpt: "",
     content: "",
-    author: "SPE Innovations",
+    author: "SPE Visions",
   });
 
   const resetForm = () => {
@@ -46,7 +46,7 @@ const ManageBlogs = () => {
       category: "",
       excerpt: "",
       content: "",
-      author: "SPE Innovations",
+      author: "SPE Visions",
     });
 
     setEditingId(null);
@@ -149,7 +149,7 @@ const ManageBlogs = () => {
               category: "",
               excerpt: "",
               content: "",
-              author: "SPE Innovations",
+              author: "SPE Visions",
             });
             setIsModalOpen(true);
           }}

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   BriefcaseBusiness,
   FileText,
@@ -8,33 +10,15 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
+import { supabase } from "../../lib/supabase";
 
-const stats = [
-  {
-    title: "Total Services",
-    value: "5",
-    description: "Active services",
-    icon: Wrench,
-  },
-  {
-    title: "Total Courses",
-    value: "3",
-    description: "Published courses",
-    icon: GraduationCap,
-  },
-  {
-    title: "Internships",
-    value: "4",
-    description: "Active programs",
-    icon: BriefcaseBusiness,
-  },
-  {
-    title: "Blog Posts",
-    value: "0",
-    description: "Published articles",
-    icon: FileText,
-  },
-];
+type StatCounts = {
+  services: number;
+  courses: number;
+  internships: number;
+  blogs: number;
+  users: number;
+};
 
 const quickActions = [
   {
@@ -64,6 +48,86 @@ const quickActions = [
 ];
 
 const Dashboard = () => {
+  const [counts, setCounts] = useState<StatCounts | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadCounts = async () => {
+      try {
+        // head: true + count: "exact" fetches only the row count,
+        // not the actual rows — fast and cheap for dashboard stats.
+        const [servicesRes, coursesRes, internshipsRes, blogsRes, usersRes] =
+          await Promise.all([
+            supabase
+              .from("services")
+              .select("*", { count: "exact", head: true })
+              .eq("is_published", true),
+            supabase
+              .from("courses")
+              .select("*", { count: "exact", head: true })
+              .eq("is_published", true),
+            supabase
+              .from("internships")
+              .select("*", { count: "exact", head: true })
+              .eq("is_published", true),
+            supabase
+              .from("blogs")
+              .select("*", { count: "exact", head: true })
+              .eq("is_published", true),
+            supabase.from("profiles").select("*", { count: "exact", head: true }),
+          ]);
+
+        if (!isMounted) return;
+
+        setCounts({
+          services: servicesRes.count ?? 0,
+          courses: coursesRes.count ?? 0,
+          internships: internshipsRes.count ?? 0,
+          blogs: blogsRes.count ?? 0,
+          users: usersRes.count ?? 0,
+        });
+      } catch (err) {
+        console.error("Failed to load dashboard stats:", err);
+        if (isMounted) setLoadError("Couldn't load live stats. Showing 0 for now.");
+      }
+    };
+
+    loadCounts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const stats = [
+    {
+      title: "Total Services",
+      value: counts?.services ?? "—",
+      description: "Active services",
+      icon: Wrench,
+    },
+    {
+      title: "Total Courses",
+      value: counts?.courses ?? "—",
+      description: "Published courses",
+      icon: GraduationCap,
+    },
+    {
+      title: "Internships",
+      value: counts?.internships ?? "—",
+      description: "Active programs",
+      icon: BriefcaseBusiness,
+    },
+    {
+      title: "Blog Posts",
+      value: counts?.blogs ?? "—",
+      description: "Published articles",
+      icon: FileText,
+    },
+  ];
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
@@ -79,10 +143,16 @@ const Dashboard = () => {
             </h1>
 
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Welcome back. Here's an overview of SPE Innovations.
+              Welcome back. Here's an overview of SPE Visions.
             </p>
           </div>
         </div>
+
+        {loadError && (
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+            {loadError}
+          </p>
+        )}
       </div>
 
       {/* Statistics */}
@@ -138,9 +208,9 @@ const Dashboard = () => {
               const Icon = action.icon;
 
               return (
-                <a
+                <Link
                   key={action.title}
-                  href={action.href}
+                  to={action.href}
                   className="group rounded-xl border border-slate-200 p-5 transition hover:border-cyan-500 hover:shadow-md dark:border-slate-800 dark:hover:border-cyan-500"
                 >
                   <div className="flex items-start gap-4">
@@ -158,7 +228,7 @@ const Dashboard = () => {
                       </p>
                     </div>
                   </div>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -203,7 +273,7 @@ const Dashboard = () => {
               </div>
 
               <span className="text-sm font-semibold text-slate-900 dark:text-white">
-                0
+                {counts?.users ?? "—"}
               </span>
             </div>
 
@@ -222,27 +292,6 @@ const Dashboard = () => {
                 Ready
               </span>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Development Notice */}
-      <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-5 dark:border-cyan-500/20 dark:bg-cyan-500/5">
-        <div className="flex gap-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400">
-            <LayoutDashboard size={20} />
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-cyan-900 dark:text-cyan-300">
-              Admin Panel Development
-            </h3>
-
-            <p className="mt-1 text-sm leading-6 text-cyan-800/80 dark:text-cyan-200/70">
-              This dashboard currently uses static data. Once the backend and
-              PostgreSQL database are connected, these statistics will update
-              automatically from your actual website data.
-            </p>
           </div>
         </div>
       </div>

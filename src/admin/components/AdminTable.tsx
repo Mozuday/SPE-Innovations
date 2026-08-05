@@ -2,7 +2,10 @@ import type { ReactNode } from "react";
 import { Edit, Trash2 } from "lucide-react";
 
 type AdminTableColumn<T> = {
-  key: string;
+  // Allows autocomplete/type-checking against real keys of T, while still
+  // permitting custom string ids for computed/render-only columns
+  // (e.g. a column with no direct 1:1 field on T).
+  key: Extract<keyof T, string> | (string & {});
   label: string;
   render?: (item: T) => ReactNode;
 };
@@ -72,11 +75,7 @@ const AdminTable = <T extends { id: string | number }>({
                     >
                       {column.render
                         ? column.render(item)
-                        : String(
-                            item[
-                              column.key as keyof T
-                            ] ?? "-"
-                          )}
+                        : String(item[column.key as keyof T] ?? "-")}
                     </td>
                   ))}
 

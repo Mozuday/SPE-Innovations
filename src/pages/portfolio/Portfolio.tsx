@@ -10,7 +10,7 @@ const projects = [
     technologies: ["React", "TypeScript", "Tailwind CSS"],
   },
   {
-    title: "SPE Innovations",
+    title: "SPE Visions",
     category: "Company Website",
     description:
       "A professional digital platform for software services, internships, certification courses and technology solutions.",

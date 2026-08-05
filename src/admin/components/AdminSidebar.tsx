@@ -87,7 +87,7 @@ const AdminSidebar = ({
           >
             SPE{" "}
             <span className="text-cyan-500">
-              Innovations
+              Visions
             </span>
           </NavLink>
 

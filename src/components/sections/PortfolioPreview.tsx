@@ -12,7 +12,7 @@ const projects = [
       "A modern portfolio designed to showcase projects, skills and professional experience with a clean, responsive interface.",
   },
   {
-    title: "SPE Innovations",
+    title: "SPE Visions",
     category: "Company Website",
     description:
       "A professional digital platform for presenting technology services, internships and practical learning opportunities.",

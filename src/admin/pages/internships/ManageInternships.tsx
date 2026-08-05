@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BriefcaseBusiness,
   CheckCircle,
@@ -9,81 +9,144 @@ import {
   Trash2,
   Users,
   X,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
-type Internship = {
-  id: number;
+import { supabase } from "../../../lib/supabase";
+import type {
+  Tables,
+  InsertTables,
+  UpdateTables,
+} from "../../../types/supabase";
+
+type Internship = Tables<"internships">;
+
+type InternshipForm = {
   title: string;
   category: string;
   description: string;
   duration: string;
+  stipend: string;
   eligibility: string;
-  skills: string[];
-  seats: number;
+  skills: string;
+  seats: string;
   deadline: string;
-  published: boolean;
+  is_published: boolean;
 };
 
-const initialInternships: Internship[] = [
-  {
-    id: 1,
-    title: "Frontend Development Internship",
-    category: "Frontend Development",
-    description:
-      "Learn modern frontend development by working on responsive websites and real-world projects.",
-    duration: "8 Weeks",
-    eligibility: "Students and freshers with basic HTML, CSS and JavaScript knowledge.",
-    skills: ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS"],
-    seats: 5,
-    deadline: "2026-08-31",
-    published: true,
-  },
-  {
-    id: 2,
-    title: "Backend Development Internship",
-    category: "Backend Development",
-    description:
-      "Build APIs, authentication systems and database-driven applications using modern backend technologies.",
-    duration: "8 Weeks",
-    eligibility: "Students or developers with basic programming knowledge.",
-    skills: ["Node.js", "Express", "PostgreSQL", "REST API"],
-    seats: 5,
-    deadline: "2026-08-31",
-    published: true,
-  },
+const emptyForm: InternshipForm = {
+  title: "",
+  category: "",
+  description: "",
+  duration: "",
+  stipend: "",
+  eligibility: "",
+  skills: "",
+  seats: "",
+  deadline: "",
+  is_published: true,
+};
+
+const categories = [
+  "Web Design",
+  "Frontend Development",
+  "Backend Development",
+  "App Development",
+  "Full Stack Development",
+  "Software Development",
+  "Other",
 ];
 
 const ManageInternships = () => {
-  const [internships, setInternships] =
-    useState<Internship[]>(initialInternships);
+  const [internships, setInternships] = useState<Internship[]>([]);
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [editingInternship, setEditingInternship] =
     useState<Internship | null>(null);
 
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("");
-  const [eligibility, setEligibility] = useState("");
-  const [skills, setSkills] = useState("");
-  const [seats, setSeats] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [published, setPublished] = useState(true);
+  const [form, setForm] = useState<InternshipForm>(emptyForm);
+
+  /*
+   * ---------------------------------------------------------
+   * FETCH INTERNSHIPS
+   * ---------------------------------------------------------
+   */
+
+  const fetchInternships = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const { data, error: fetchError } = await supabase
+        .from("internships")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      setInternships(data ?? []);
+    } catch (err) {
+      console.error("Failed to fetch internships:", err);
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load internships."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInternships();
+  }, []);
+
+  /*
+   * ---------------------------------------------------------
+   * HELPERS
+   * ---------------------------------------------------------
+   */
+
+  const updateForm = <K extends keyof InternshipForm>(
+    field: K,
+    value: InternshipForm[K]
+  ) => {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const createSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  };
 
   const resetForm = () => {
-    setTitle("");
-    setCategory("");
-    setDescription("");
-    setDuration("");
-    setEligibility("");
-    setSkills("");
-    setSeats("");
-    setDeadline("");
-    setPublished(true);
+    setForm(emptyForm);
     setEditingInternship(null);
+    setError("");
   };
+
+  /*
+   * ---------------------------------------------------------
+   * MODAL
+   * ---------------------------------------------------------
+   */
 
   const openAddModal = () => {
     resetForm();
@@ -93,115 +156,324 @@ const ManageInternships = () => {
   const openEditModal = (internship: Internship) => {
     setEditingInternship(internship);
 
-    setTitle(internship.title);
-    setCategory(internship.category);
-    setDescription(internship.description);
-    setDuration(internship.duration);
-    setEligibility(internship.eligibility);
-    setSkills(internship.skills.join(", "));
-    setSeats(String(internship.seats));
-    setDeadline(internship.deadline);
-    setPublished(internship.published);
+    setForm({
+      title: internship.title,
+      category: internship.category ?? "",
+      description: internship.description ?? "",
+      duration: internship.duration ?? "",
+      stipend: internship.stipend ?? "",
+      eligibility: internship.eligibility ?? "",
+      skills: internship.skills?.join(", ") ?? "",
+      seats: internship.seats?.toString() ?? "",
+      deadline: internship.deadline ?? "",
+      is_published: internship.is_published,
+    });
 
+    setError("");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    if (saving) return;
+
     setIsModalOpen(false);
     resetForm();
   };
 
-  const handleSubmit = (
+  /*
+   * ---------------------------------------------------------
+   * CREATE / UPDATE
+   * ---------------------------------------------------------
+   */
+
+  const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
 
-    if (
-      !title.trim() ||
-      !category.trim() ||
-      !description.trim() ||
-      !duration.trim() ||
-      !eligibility.trim() ||
-      !skills.trim() ||
-      !seats ||
-      !deadline
-    ) {
+    setError("");
+    setSuccess("");
+
+    if (!form.title.trim()) {
+      setError("Internship title is required.");
       return;
     }
 
-    const internshipData = {
-      title: title.trim(),
-      category: category.trim(),
-      description: description.trim(),
-      duration: duration.trim(),
-      eligibility: eligibility.trim(),
-      skills: skills
+    if (!form.category.trim()) {
+      setError("Please select a category.");
+      return;
+    }
+
+    if (!form.description.trim()) {
+      setError("Description is required.");
+      return;
+    }
+
+    if (!form.duration.trim()) {
+      setError("Duration is required.");
+      return;
+    }
+
+    if (!form.eligibility.trim()) {
+      setError("Eligibility is required.");
+      return;
+    }
+
+    if (!form.skills.trim()) {
+      setError("At least one skill is required.");
+      return;
+    }
+
+    const seats = Number(form.seats);
+
+    if (!Number.isInteger(seats) || seats < 1) {
+      setError("Seats must be a valid number greater than 0.");
+      return;
+    }
+
+    if (!form.deadline) {
+      setError("Application deadline is required.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const skills = form.skills
         .split(",")
         .map((skill) => skill.trim())
-        .filter(Boolean),
-      seats: Number(seats),
-      deadline,
-      published,
-    };
+        .filter(Boolean);
 
-    if (editingInternship) {
-      setInternships((currentInternships) =>
-        currentInternships.map((internship) =>
-          internship.id === editingInternship.id
-            ? {
-                ...internship,
-                ...internshipData,
-              }
-            : internship
-        )
+      /*
+       * CREATE
+       */
+
+      if (!editingInternship) {
+        const internshipData: InsertTables<"internships"> = {
+          title: form.title.trim(),
+          slug: createSlug(form.title),
+          description: form.description.trim(),
+          duration: form.duration.trim(),
+          stipend: form.stipend.trim() || null,
+          category: form.category.trim(),
+          eligibility: form.eligibility.trim(),
+          skills,
+          seats,
+          deadline: form.deadline,
+          is_published: form.is_published,
+        };
+
+        const { data, error: insertError } = await supabase
+          .from("internships")
+          .insert(internshipData)
+          .select()
+          .single();
+
+        if (insertError) {
+          throw insertError;
+        }
+
+        if (data) {
+          setInternships((current) => [
+            data,
+            ...current,
+          ]);
+        }
+
+        setSuccess("Internship created successfully.");
+      }
+
+      /*
+       * UPDATE
+       */
+
+      else {
+        const internshipData: UpdateTables<"internships"> = {
+          title: form.title.trim(),
+          slug: createSlug(form.title),
+          description: form.description.trim(),
+          duration: form.duration.trim(),
+          stipend: form.stipend.trim() || null,
+          category: form.category.trim(),
+          eligibility: form.eligibility.trim(),
+          skills,
+          seats,
+          deadline: form.deadline,
+          is_published: form.is_published,
+        };
+
+        const { data, error: updateError } = await supabase
+          .from("internships")
+          .update(internshipData)
+          .eq("id", editingInternship.id)
+          .select()
+          .single();
+
+        if (updateError) {
+          throw updateError;
+        }
+
+        if (data) {
+          setInternships((current) =>
+            current.map((internship) =>
+              internship.id === editingInternship.id
+                ? data
+                : internship
+            )
+          );
+        }
+
+        setSuccess("Internship updated successfully.");
+      }
+
+      setIsModalOpen(false);
+      resetForm();
+    } catch (err) {
+      console.error("Failed to save internship:", err);
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to save internship."
       );
-    } else {
-      const newInternship: Internship = {
-        id: Date.now(),
-        ...internshipData,
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /*
+   * ---------------------------------------------------------
+   * DELETE
+   * ---------------------------------------------------------
+   */
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this internship? This action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setError("");
+      setSuccess("");
+
+      const { error: deleteError } = await supabase
+        .from("internships")
+        .delete()
+        .eq("id", id);
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      setInternships((current) =>
+        current.filter((internship) => internship.id !== id)
+      );
+
+      setSuccess("Internship deleted successfully.");
+    } catch (err) {
+      console.error("Failed to delete internship:", err);
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to delete internship."
+      );
+    }
+  };
+
+  /*
+   * ---------------------------------------------------------
+   * PUBLISH / UNPUBLISH
+   * ---------------------------------------------------------
+   */
+
+  const togglePublished = async (
+    internship: Internship
+  ) => {
+    try {
+      setError("");
+      setSuccess("");
+
+      const newPublishedState =
+        !internship.is_published;
+
+      const update: UpdateTables<"internships"> = {
+        is_published: newPublishedState,
       };
 
-      setInternships((currentInternships) => [
-        ...currentInternships,
-        newInternship,
-      ]);
+      const { data, error: updateError } = await supabase
+        .from("internships")
+        .update(update)
+        .eq("id", internship.id)
+        .select()
+        .single();
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      if (data) {
+        setInternships((current) =>
+          current.map((item) =>
+            item.id === internship.id
+              ? data
+              : item
+          )
+        );
+      }
+
+      setSuccess(
+        newPublishedState
+          ? "Internship published."
+          : "Internship unpublished."
+      );
+    } catch (err) {
+      console.error(
+        "Failed to change publication status:",
+        err
+      );
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to update publication status."
+      );
     }
-
-    closeModal();
   };
 
-  const handleDelete = (id: number) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this internship?"
-    );
+  /*
+   * ---------------------------------------------------------
+   * LOADING
+   * ---------------------------------------------------------
+   */
 
-    if (!confirmed) {
-      return;
-    }
+  if (loading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+          <Loader2
+            size={24}
+            className="animate-spin"
+          />
 
-    setInternships((currentInternships) =>
-      currentInternships.filter(
-        (internship) => internship.id !== id
-      )
+          <span>Loading internships...</span>
+        </div>
+      </div>
     );
-  };
+  }
 
-  const togglePublished = (id: number) => {
-    setInternships((currentInternships) =>
-      currentInternships.map((internship) =>
-        internship.id === id
-          ? {
-              ...internship,
-              published: !internship.published,
-            }
-          : internship
-      )
-    );
-  };
+  /*
+   * ---------------------------------------------------------
+   * UI
+   * ---------------------------------------------------------
+   */
 
   return (
     <div className="space-y-8">
-      {/* Page Header */}
+
+      {/* HEADER */}
 
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -210,7 +482,7 @@ const ManageInternships = () => {
           </h1>
 
           <p className="mt-2 text-slate-600 dark:text-slate-400">
-            Create and manage internship opportunities for students.
+            Create, edit, publish and manage internship opportunities.
           </p>
         </div>
 
@@ -224,7 +496,37 @@ const ManageInternships = () => {
         </button>
       </div>
 
-      {/* Internship List */}
+      {/* SUCCESS */}
+
+      {success && (
+        <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700 dark:border-green-900/50 dark:bg-green-950/30 dark:text-green-300">
+          <CheckCircle size={20} />
+          <span>{success}</span>
+        </div>
+      )}
+
+      {/* ERROR */}
+
+      {error && !isModalOpen && (
+        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+          <AlertCircle
+            size={20}
+            className="mt-0.5 shrink-0"
+          />
+
+          <div className="flex-1">
+            <p className="font-medium">
+              Something went wrong
+            </p>
+
+            <p className="mt-1 text-sm">
+              {error}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* INTERNSHIP LIST */}
 
       <div className="grid gap-6">
         {internships.length === 0 ? (
@@ -241,6 +543,15 @@ const ManageInternships = () => {
             <p className="mt-2 text-slate-500 dark:text-slate-400">
               Create your first internship opportunity.
             </p>
+
+            <button
+              type="button"
+              onClick={openAddModal}
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
+            >
+              <Plus size={18} />
+              Create Internship
+            </button>
           </div>
         ) : (
           internships.map((internship) => (
@@ -249,7 +560,8 @@ const ManageInternships = () => {
               className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
-                {/* Information */}
+
+                {/* INFORMATION */}
 
                 <div className="flex gap-5">
                   <div className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400 sm:flex">
@@ -257,75 +569,102 @@ const ManageInternships = () => {
                   </div>
 
                   <div className="min-w-0">
+
+                    {/* BADGES */}
+
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-                        {internship.category}
-                      </span>
+                      {internship.category && (
+                        <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                          {internship.category}
+                        </span>
+                      )}
 
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          internship.published
+                          internship.is_published
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
                             : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                         }`}
                       >
-                        {internship.published
+                        {internship.is_published
                           ? "Published"
                           : "Draft"}
                       </span>
                     </div>
 
+                    {/* TITLE */}
+
                     <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-white">
                       {internship.title}
                     </h2>
+
+                    {/* DESCRIPTION */}
 
                     <p className="mt-3 max-w-3xl leading-7 text-slate-600 dark:text-slate-400">
                       {internship.description}
                     </p>
 
-                    {/* Details */}
+                    {/* DETAILS */}
 
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                        Duration: {internship.duration}
-                      </span>
-
-                      <span className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                        <Users size={16} />
-                        {internship.seats} Seats
-                      </span>
-
-                      <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                        Deadline: {internship.deadline}
-                      </span>
-                    </div>
-
-                    {/* Skills */}
-
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {internship.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-400"
-                        >
-                          {skill}
+                      {internship.duration && (
+                        <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                          Duration: {internship.duration}
                         </span>
-                      ))}
+                      )}
+
+                      {internship.seats !== null && (
+                        <span className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                          <Users size={16} />
+                          {internship.seats} Seats
+                        </span>
+                      )}
+
+                      {internship.deadline && (
+                        <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                          Deadline: {internship.deadline}
+                        </span>
+                      )}
+
+                      {internship.stipend && (
+                        <span className="rounded-lg bg-green-100 px-3 py-2 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                          Stipend: {internship.stipend}
+                        </span>
+                      )}
                     </div>
+
+                    {/* SKILLS */}
+
+                    {internship.skills &&
+                      internship.skills.length > 0 && (
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {internship.skills.map(
+                            (skill) => (
+                              <span
+                                key={skill}
+                                className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-400"
+                              >
+                                {skill}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
 
-                {/* Actions */}
+                {/* ACTIONS */}
 
                 <div className="flex shrink-0 flex-wrap gap-3">
+
                   <button
                     type="button"
                     onClick={() =>
-                      togglePublished(internship.id)
+                      togglePublished(internship)
                     }
                     className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 font-medium text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:text-slate-300"
                   >
-                    {internship.published ? (
+                    {internship.is_published ? (
                       <>
                         <EyeOff size={17} />
                         Unpublish
@@ -366,14 +705,16 @@ const ManageInternships = () => {
         )}
       </div>
 
-      {/* Add / Edit Modal */}
+      {/* MODAL */}
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
-            {/* Modal Header */}
 
-            <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-800">
+          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
+
+            {/* MODAL HEADER */}
+
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                   {editingInternship
@@ -382,26 +723,41 @@ const ManageInternships = () => {
                 </h2>
 
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Manage the internship details displayed to applicants.
+                  Manage the internship shown on your public website.
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 dark:hover:bg-slate-800"
+                disabled={saving}
+                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 disabled:cursor-not-allowed dark:hover:bg-slate-800"
               >
                 <X size={22} />
               </button>
             </div>
 
-            {/* Form */}
+            {/* FORM */}
 
             <form
               onSubmit={handleSubmit}
               className="space-y-6 p-6"
             >
-              {/* Title */}
+
+              {/* FORM ERROR */}
+
+              {error && (
+                <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+                  <AlertCircle
+                    size={18}
+                    className="mt-0.5 shrink-0"
+                  />
+
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* TITLE */}
 
               <div>
                 <label
@@ -414,9 +770,12 @@ const ManageInternships = () => {
                 <input
                   id="internship-title"
                   type="text"
-                  value={title}
+                  value={form.title}
                   onChange={(event) =>
-                    setTitle(event.target.value)
+                    updateForm(
+                      "title",
+                      event.target.value
+                    )
                   }
                   placeholder="Frontend Development Internship"
                   required
@@ -424,9 +783,10 @@ const ManageInternships = () => {
                 />
               </div>
 
-              {/* Category + Duration */}
+              {/* CATEGORY + DURATION */}
 
               <div className="grid gap-5 sm:grid-cols-2">
+
                 <div>
                   <label
                     htmlFor="internship-category"
@@ -437,9 +797,12 @@ const ManageInternships = () => {
 
                   <select
                     id="internship-category"
-                    value={category}
+                    value={form.category}
                     onChange={(event) =>
-                      setCategory(event.target.value)
+                      updateForm(
+                        "category",
+                        event.target.value
+                      )
                     }
                     required
                     className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
@@ -448,25 +811,14 @@ const ManageInternships = () => {
                       Select Category
                     </option>
 
-                    <option value="Web Design">
-                      Web Design
-                    </option>
-
-                    <option value="Frontend Development">
-                      Frontend Development
-                    </option>
-
-                    <option value="Backend Development">
-                      Backend Development
-                    </option>
-
-                    <option value="App Development">
-                      App Development
-                    </option>
-
-                    <option value="Full Stack Development">
-                      Full Stack Development
-                    </option>
+                    {categories.map((item) => (
+                      <option
+                        key={item}
+                        value={item}
+                      >
+                        {item}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -481,9 +833,12 @@ const ManageInternships = () => {
                   <input
                     id="internship-duration"
                     type="text"
-                    value={duration}
+                    value={form.duration}
                     onChange={(event) =>
-                      setDuration(event.target.value)
+                      updateForm(
+                        "duration",
+                        event.target.value
+                      )
                     }
                     placeholder="8 Weeks"
                     required
@@ -492,7 +847,32 @@ const ManageInternships = () => {
                 </div>
               </div>
 
-              {/* Description */}
+              {/* STIPEND */}
+
+              <div>
+                <label
+                  htmlFor="internship-stipend"
+                  className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
+                >
+                  Stipend
+                </label>
+
+                <input
+                  id="internship-stipend"
+                  type="text"
+                  value={form.stipend}
+                  onChange={(event) =>
+                    updateForm(
+                      "stipend",
+                      event.target.value
+                    )
+                  }
+                  placeholder="Unpaid / ₹5,000 per month"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                />
+              </div>
+
+              {/* DESCRIPTION */}
 
               <div>
                 <label
@@ -504,9 +884,12 @@ const ManageInternships = () => {
 
                 <textarea
                   id="internship-description"
-                  value={description}
+                  value={form.description}
                   onChange={(event) =>
-                    setDescription(event.target.value)
+                    updateForm(
+                      "description",
+                      event.target.value
+                    )
                   }
                   placeholder="Describe the internship program..."
                   rows={4}
@@ -515,7 +898,7 @@ const ManageInternships = () => {
                 />
               </div>
 
-              {/* Eligibility */}
+              {/* ELIGIBILITY */}
 
               <div>
                 <label
@@ -527,9 +910,12 @@ const ManageInternships = () => {
 
                 <textarea
                   id="internship-eligibility"
-                  value={eligibility}
+                  value={form.eligibility}
                   onChange={(event) =>
-                    setEligibility(event.target.value)
+                    updateForm(
+                      "eligibility",
+                      event.target.value
+                    )
                   }
                   placeholder="Who can apply for this internship?"
                   rows={3}
@@ -538,7 +924,7 @@ const ManageInternships = () => {
                 />
               </div>
 
-              {/* Skills */}
+              {/* SKILLS */}
 
               <div>
                 <label
@@ -551,9 +937,12 @@ const ManageInternships = () => {
                 <input
                   id="internship-skills"
                   type="text"
-                  value={skills}
+                  value={form.skills}
                   onChange={(event) =>
-                    setSkills(event.target.value)
+                    updateForm(
+                      "skills",
+                      event.target.value
+                    )
                   }
                   placeholder="React, JavaScript, Tailwind CSS"
                   required
@@ -565,9 +954,10 @@ const ManageInternships = () => {
                 </p>
               </div>
 
-              {/* Seats + Deadline */}
+              {/* SEATS + DEADLINE */}
 
               <div className="grid gap-5 sm:grid-cols-2">
+
                 <div>
                   <label
                     htmlFor="internship-seats"
@@ -580,9 +970,12 @@ const ManageInternships = () => {
                     id="internship-seats"
                     type="number"
                     min="1"
-                    value={seats}
+                    value={form.seats}
                     onChange={(event) =>
-                      setSeats(event.target.value)
+                      updateForm(
+                        "seats",
+                        event.target.value
+                      )
                     }
                     placeholder="5"
                     required
@@ -601,9 +994,12 @@ const ManageInternships = () => {
                   <input
                     id="internship-deadline"
                     type="date"
-                    value={deadline}
+                    value={form.deadline}
                     onChange={(event) =>
-                      setDeadline(event.target.value)
+                      updateForm(
+                        "deadline",
+                        event.target.value
+                      )
                     }
                     required
                     className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
@@ -611,14 +1007,18 @@ const ManageInternships = () => {
                 </div>
               </div>
 
-              {/* Publish */}
+              {/* PUBLISH */}
 
               <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+
                 <input
                   type="checkbox"
-                  checked={published}
+                  checked={form.is_published}
                   onChange={(event) =>
-                    setPublished(event.target.checked)
+                    updateForm(
+                      "is_published",
+                      event.target.checked
+                    )
                   }
                   className="h-5 w-5 accent-blue-600"
                 />
@@ -635,27 +1035,37 @@ const ManageInternships = () => {
                     </p>
 
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                      Published internships will be visible on the public website.
+                      Published internships will appear on the public website.
                     </p>
                   </div>
                 </div>
               </label>
 
-              {/* Form Actions */}
+              {/* ACTIONS */}
 
               <div className="flex justify-end gap-3 border-t border-slate-200 pt-6 dark:border-slate-800">
+
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  disabled={saving}
+                  className="rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+                  disabled={saving}
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
+                  {saving && (
+                    <Loader2
+                      size={18}
+                      className="animate-spin"
+                    />
+                  )}
+
                   {editingInternship
                     ? "Update Internship"
                     : "Create Internship"}
