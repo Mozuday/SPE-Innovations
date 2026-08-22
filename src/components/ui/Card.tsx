@@ -4,7 +4,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
   hover?: boolean;
-}
+} l
 
 const Card = ({
   children,
